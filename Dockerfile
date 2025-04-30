@@ -1,4 +1,4 @@
-FROM kong:3.5
+FROM kong:3.9
 
 # Create directory for declarative config
 RUN mkdir -p /usr/local/kong/declarative
