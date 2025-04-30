@@ -5,7 +5,7 @@ RUN mkdir -p /usr/local/kong/declarative
 
 # Copy configuration files
 COPY kong.conf /etc/kong/kong.conf
-COPY kong.yml.sample /usr/local/kong/declarative/kong.yml
+COPY kong.yaml /usr/local/kong/declarative/kong.yaml
 
 # Copy and set up bootstrap script
 USER root

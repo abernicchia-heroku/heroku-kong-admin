@@ -1,14 +1,13 @@
 {
-  "name": "Kong API Gateway",
-  "description": "Kong API Gateway running on Heroku",
+  "name": "Kong API Admin",
+  "description": "Kong API Admin running on Heroku",
   "keywords": [
     "kong",
-    "api-gateway",
+    "api-admin",
     "api",
-    "gateway",
-    "proxy"
+    "admin"
   ],
-  "repository": "https://github.com/abernicchia-heroku/heroku-kong-proxy",
+  "repository": "https://github.com/abernicchia-heroku/heroku-kong-admin",
   "stack": "container",
   "success_url": "/",
   "addons": [
@@ -36,16 +35,16 @@
       "required": true
     },
     "KONG_PROXY_LISTEN": {
-      "description": "Proxy listen configuration for Heroku",
-      "value": "0.0.0.0:${PORT}"
+      "description": "Proxy listen configuration for Heroku (disabled for admin)",
+      "value": "off"
     },
     "KONG_ADMIN_LISTEN": {
-      "description": "Admin API listen configuration (disabled for proxy)",
-      "value": "off"
+      "description": "Admin API listen configuration",
+      "value": "0.0.0.0:${PORT}"
     },
     "KONG_DECLARATIVE_CONFIG": {
       "description": "Path to declarative configuration file",
-      "value": "/usr/local/kong/declarative/kong.yml"
+      "value": "/usr/local/kong/declarative/kong.yaml"
     },
     "KONG_PROXY_ACCESS_LOG": {
       "description": "Proxy access log location",
