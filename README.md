@@ -1,4 +1,4 @@
-# Kong API Gateway on Heroku
+# Kong Admin API on Heroku
 
 This repository contains a Dockerized "Kong Gateway Admin API (Control Plane) configured to run on Heroku. Kong is a popular, open-source API Gateway that helps you manage, secure, and monitor your APIs.
 
