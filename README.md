@@ -149,47 +149,15 @@ For issues and questions, please open an issue in the GitHub repository.
 
 ### Initial Setup
 
-1. Create a temporary Admin API endpoint using a one-off dyno:
-   ```bash
-   heroku run -a your-app-name \
-     -e KONG_DATABASE=postgres \
-     -e KONG_PG_SSL=on \
-     -e KONG_PG_SSL_VERIFY=off \
-     -e KONG_ADMIN_LISTEN=0.0.0.0:8001 \
-     -p 8001 \
-     bash
-   ```
-
-2. In the dyno shell, parse the database URL and set up Kong environment variables:
-   ```bash
-   # Get DATABASE_URL from the environment
-   DATABASE_URL=$(echo $DATABASE_URL)
-   
-   # Parse DATABASE_URL components
-   userpass=$(echo "$DATABASE_URL" | sed -e "s|postgres://\([^@]*\)@.*|\1|")
-   hostport=$(echo "$DATABASE_URL" | sed -e "s|postgres://[^@]*@\([^/]*\)/.*|\1|")
-   dbname=$(echo "$DATABASE_URL" | sed -e "s|postgres://[^@]*@[^/]*/\(.*\)|\1|")
-   
-   # Set Kong environment variables
-   export KONG_PG_USER=$(echo "$userpass" | cut -d: -f1)
-   export KONG_PG_PASSWORD=$(echo "$userpass" | cut -d: -f2)
-   export KONG_PG_HOST=$(echo "$hostport" | cut -d: -f1)
-   export KONG_PG_PORT=$(echo "$hostport" | cut -d: -f2)
-   export KONG_PG_DATABASE="$dbname"
-   ```
-
-3. Start Kong with Admin API enabled:
-   ```bash
-   kong start
-   ```
+1. Start the Heroku Admin API app
 
 4. In a new terminal, create a configuration file:
    ```bash
    # Get the dyno's URL (replace your-app-name)
-   KONG_ADDR=$(heroku run:status -a your-app-name | grep 'web.' | awk '{print $3}')
+   MYKONG_ADMIN_API_URL=$(heroku info -a <your-app-name> | grep "Web URL" | awk '{print $3}')
    
    # Export current configuration
-   deck dump --kong-addr http://$KONG_ADDR:8001 --output-file kong.yaml
+   deck gateway dump --kong-addr $MYKONG_ADMIN_API_URL --output-file kong.yaml
    ```
 
 ### Managing Configuration
@@ -212,18 +180,26 @@ For issues and questions, please open an issue in the GitHub repository.
 
 2. Validate your configuration:
    ```bash
-   deck validate -s kong.yaml
+   deck file validate kong.yaml
    ```
 
 3. Diff changes before applying:
    ```bash
-   deck diff --kong-addr http://$KONG_ADDR:8001 -s kong.yaml
+   deck gateway diff --kong-addr $MYKONG_ADMIN_API_URL kong.yaml
    ```
 
 4. Apply the configuration:
    ```bash
-   deck sync --kong-addr http://$KONG_ADDR:8001 -s kong.yaml
+   deck gateway sync --kong-addr $MYKONG_ADMIN_API_URL kong.yaml
    ```
+
+5. Test the example-service
+   ```bash
+   MYKONG_PROXY_URL=$(heroku info -a <your-kong-proxy-app-name> | grep "Web URL" | awk '{print $3}')
+   
+   curl $MYKONG_PROXY_URL/example
+   ```
+
 
 ### Best Practices
 
@@ -251,7 +227,7 @@ If you encounter issues:
 
 1. Verify connectivity:
    ```bash
-   curl http://$KONG_ADDR:8001/status
+   curl $MYKONG_ADMIN_API_URL/status
    ```
 
 2. Check decK version compatibility:
@@ -261,5 +237,5 @@ If you encounter issues:
 
 3. Enable verbose logging:
    ```bash
-   deck sync --kong-addr http://$KONG_ADDR:8001 -s kong.yaml --verbose
+   deck gateway sync --kong-addr $MYKONG_ADMIN_API_URL --verbose 1 kong.yaml
    ```
