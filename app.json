@@ -1,88 +1,74 @@
 {
-  "name": "ab-cr-kong-admin",
-  "description": "Kong Gateway Admin API (Control Plane)",
-  "keywords": ["kong", "api-gateway", "admin-api"],
+  "name": "Kong API Gateway",
+  "description": "Kong API Gateway running on Heroku",
+  "keywords": [
+    "kong",
+    "api-gateway",
+    "api",
+    "gateway",
+    "proxy"
+  ],
+  "repository": "https://github.com/abernicchia-heroku/heroku-kong-proxy",
   "stack": "container",
+  "success_url": "/",
+  "addons": [
+    {
+      "plan": "heroku-postgresql:standard-0"
+    },
+    {
+      "plan": "papertrail:choklad"
+    }
+  ],
   "env": {
     "KONG_DATABASE": {
-      "description": "Database type",
-      "value": "postgres"
-    },
-    "KONG_PG_HOST": {
-      "description": "Database host from DATABASE_URL",
-      "value": "${DATABASE_HOST}"
-    },
-    "KONG_PG_PORT": {
-      "description": "Database port from DATABASE_URL",
-      "value": "${DATABASE_PORT}"
-    },
-    "KONG_PG_USER": {
-      "description": "Database user from DATABASE_URL",
-      "value": "${DATABASE_USER}"
-    },
-    "KONG_PG_PASSWORD": {
-      "description": "Database password from DATABASE_URL",
-      "value": "${DATABASE_PASSWORD}"
-    },
-    "KONG_PG_DATABASE": {
-      "description": "Database name from DATABASE_URL",
-      "value": "${DATABASE_NAME}"
+      "description": "Database type for Kong",
+      "value": "postgres",
+      "required": true
     },
     "KONG_PG_SSL": {
-      "description": "Enable SSL for database connection",
-      "value": "on"
+      "description": "Enable SSL for PostgreSQL connections",
+      "value": "on",
+      "required": true
     },
     "KONG_PG_SSL_VERIFY": {
-      "description": "Verify SSL certificate",
-      "value": "off"
-    },
-    "KONG_ADMIN_LISTEN": {
-      "description": "Admin API listen configuration",
-      "value": "0.0.0.0:${PORT}"
+      "description": "Disable SSL verification for Heroku PostgreSQL",
+      "value": "off",
+      "required": true
     },
     "KONG_PROXY_LISTEN": {
-      "description": "Proxy listen configuration (disabled for admin)",
+      "description": "Proxy listen configuration for Heroku",
+      "value": "0.0.0.0:${PORT}"
+    },
+    "KONG_ADMIN_LISTEN": {
+      "description": "Admin API listen configuration (disabled for proxy)",
       "value": "off"
     },
-    "KONG_ADMIN_GUI_URL": {
-      "description": "Kong Manager URL",
-      "value": "https://ab-cr-kong-manager.herokuapp.com"
+    "KONG_DECLARATIVE_CONFIG": {
+      "description": "Path to declarative configuration file",
+      "value": "/usr/local/kong/declarative/kong.yml"
     },
-    "KONG_ADMIN_GUI_AUTH": {
-      "description": "Enable authentication for Kong Manager",
-      "value": "basic-auth"
-    },
-    "KONG_ENFORCE_RBAC": {
-      "description": "Enable RBAC",
-      "value": "on"
-    },
-    "KONG_ADMIN_ACCESS_LOG": {
-      "description": "Admin API access log location",
+    "KONG_PROXY_ACCESS_LOG": {
+      "description": "Proxy access log location",
       "value": "/dev/stdout"
     },
-    "KONG_ADMIN_ERROR_LOG": {
-      "description": "Admin API error log location",
+    "KONG_PROXY_ERROR_LOG": {
+      "description": "Proxy error log location",
       "value": "/dev/stderr"
     },
     "KONG_LOG_LEVEL": {
       "description": "Log level",
       "value": "notice"
+    },
+    "APP_RUN_KONG_MIGRATIONS": {
+      "description": "Set to 'true' to run database migrations on startup (first deploy only)",
+      "value": "true",
+      "required": true
     }
   },
-  "addons": [
-    {
-      "plan": "heroku-postgresql:basic"
-    }
-  ],
   "formation": {
     "web": {
       "quantity": 1,
-      "size": "basic"
+      "size": "standard-1x"
     }
-  },
-  "buildpacks": [
-    {
-      "url": "heroku/nodejs"
-    }
-  ]
+  }
 } 
