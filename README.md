@@ -10,10 +10,11 @@ The author of this article makes any warranties about the completeness, reliabil
 
 ## Prerequisites
 
-- Heroku CLI installed
-- Docker installed (for local development)
 - A Heroku account
+- Heroku CLI installed
 - PostgreSQL add-on attached to your Heroku app
+- Docker installed (for local development)
+
 
 ## Deployment Steps
 
@@ -81,10 +82,20 @@ You should see messages indicating that Kong has started successfully and is lis
 
 The Kong gateway is configured using the following files:
 - `kong.conf`: Main configuration file
-- `kong.yml.sample`: Sample of declarative configuration for routes and services
+- `kong.yaml`: Sample of declarative configuration for routes and services
 - `Dockerfile`: Container configuration and bootstrap script
 
 Environment variables are automatically configured by the bootstrap script using the `DATABASE_URL` provided by Heroku.
+
+## ⚠️ Security Notice
+
+**This implementation does NOT provide a secured Kong Admin API**
+
+- There is no enforced HTTPS/SSL for the Kong Admin API.
+- No authentication or RBAC is enabled by default with Kong OSS.
+- The API is accessible to anyone who knows the URL.
+
+**Do NOT use this setup in production or for sensitive workloads without adding proper security controls (HTTPS, firewall, authentication, etc.).**
 
 ## Troubleshooting
 
@@ -116,7 +127,7 @@ To build and run the container locally:
 
 2. Run the container:
    ```bash
-   docker run -p 8000:8000 -e DATABASE_URL=your_postgres_url kong-heroku
+   docker run -p 8001:8001 -e DATABASE_URL=your_postgres_url kong-heroku
    ```
 
 ## Contributing
