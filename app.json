@@ -19,41 +19,6 @@
     }
   ],
   "env": {
-    "KONG_DATABASE": {
-      "description": "Database type for Kong",
-      "value": "postgres",
-      "required": true
-    },
-    "KONG_PG_SSL": {
-      "description": "Enable SSL for PostgreSQL connections",
-      "value": "on",
-      "required": true
-    },
-    "KONG_PG_SSL_VERIFY": {
-      "description": "Disable SSL verification for Heroku PostgreSQL",
-      "value": "off",
-      "required": true
-    },
-    "KONG_PROXY_LISTEN": {
-      "description": "Proxy listen configuration for Heroku (disabled for admin)",
-      "value": "off"
-    },
-    "KONG_ADMIN_LISTEN": {
-      "description": "Admin API listen configuration",
-      "value": "0.0.0.0:${PORT}"
-    },
-    "KONG_DECLARATIVE_CONFIG": {
-      "description": "Path to declarative configuration file",
-      "value": "/usr/local/kong/declarative/kong.yaml"
-    },
-    "KONG_PROXY_ACCESS_LOG": {
-      "description": "Proxy access log location",
-      "value": "/dev/stdout"
-    },
-    "KONG_PROXY_ERROR_LOG": {
-      "description": "Proxy error log location",
-      "value": "/dev/stderr"
-    },
     "KONG_LOG_LEVEL": {
       "description": "Log level",
       "value": "notice"
