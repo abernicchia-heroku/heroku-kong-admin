@@ -87,6 +87,10 @@ The Kong gateway is configured using the following files:
 
 Environment variables are automatically configured by the bootstrap script using the `DATABASE_URL` provided by Heroku.
 
+Once Kong Admin API is running correctly you may start configuring your Services and Routes using the API via curl or decK (see below), otherwise you can deploy on Heroku Kong Manager (see https://github.com/abernicchia-heroku/heroku-kong-manager) that provides a GUI.
+
+When the configuration is complete you can deploy on Heroku Kong Proxy (see https://github.com/abernicchia-heroku/heroku-kong-proxy) to start serving your endpoints.
+
 ## ⚠️ Security Notice
 
 **This implementation does NOT provide a secured Kong Admin API**
@@ -97,50 +101,6 @@ Environment variables are automatically configured by the bootstrap script using
 
 **Do NOT use this setup in production or for sensitive workloads without adding proper security controls (HTTPS, firewall, authentication, etc.).**
 
-## Troubleshooting
-
-If you encounter any issues:
-
-1. Check the logs:
-   ```bash
-   heroku logs --tail
-   ```
-
-2. Verify the database connection:
-   ```bash
-   heroku config | grep DATABASE_URL
-   ```
-
-3. If needed, you can restart the application:
-   ```bash
-   heroku restart
-   ```
-
-## Local Development
-
-To build and run the container locally:
-
-1. Build the image:
-   ```bash
-   docker build -t kong-heroku .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -p 8001:8001 -e DATABASE_URL=your_postgres_url kong-heroku
-   ```
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a new Pull Request
-
-## Support
-
-For issues and questions, please open an issue in the GitHub repository.
 
 ## Managing Kong Configuration with decK
 
@@ -250,3 +210,48 @@ If you encounter issues:
    ```bash
    deck gateway sync --kong-addr $MYKONG_ADMIN_API_URL --verbose 1 kong.yaml
    ```
+
+## Troubleshooting
+
+If you encounter any issues:
+
+1. Check the logs:
+   ```bash
+   heroku logs --tail
+   ```
+
+2. Verify the database connection:
+   ```bash
+   heroku config | grep DATABASE_URL
+   ```
+
+3. If needed, you can restart the application:
+   ```bash
+   heroku restart
+   ```
+
+## Local Development
+
+To build and run the container locally:
+
+1. Build the image:
+   ```bash
+   docker build -t kong-heroku .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -p 8001:8001 -e DATABASE_URL=your_postgres_url kong-heroku
+   ```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a new Pull Request
+
+## Support
+
+For issues and questions, please open an issue in the GitHub repository.
